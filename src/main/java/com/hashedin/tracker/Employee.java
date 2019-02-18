@@ -2,14 +2,27 @@ package com.hashedin.tracker;
 import java.time.temporal.ChronoUnit;
 import java.time.Period;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Employee {
 
     private int empId;
     private String empName;
     private String empDesignation;
-    private int leaveBalance=5;
+    private int leaveBalance=2;
+
+//    public HashMap<Integer, Integer> getLeaveBalance1() {
+//        return leaveBalance1;
+//    }
+//
+//
+//    public void setLeaveBalance1(HashMap<Integer, Integer> leaveBalance1) {
+//        this.leaveBalance1 = leaveBalance1;
+//    }
+//
+//    HashMap<Integer,Integer> leaveBalance1=new HashMap<Integer, Integer>();
 
     public int getLeavesTaken() {
         return leavesTaken;
@@ -29,8 +42,9 @@ public class Employee {
     }
 
     private String sex;
-    Employee() {
-
+    public Employee() {
+//        for(int i=1;i<=12;i++)
+//            leaveBalance1.put(i,2);
     }
     Employee(int eId, String eName, String eDesignation, int leaveBal, String sex) {
         this.empId = eId;

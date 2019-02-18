@@ -2,18 +2,8 @@ package com.hashedin.tracker;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 public class LeaveManager {
-//     enum leaveType {
-//        OOO, compOff, maternityLeave, paternityLeave;
-//    }
-//    public void apply(Employee e, leaveType type) {
-////        System.out.println("Leave Allocated of type:" + type + " to\nID: " + e.getEmpId() + "\nName:" + e.getEmpName()
-////        + "\nDesignation:" + e.getEmpDesignation() + "\nLeave Balance:" + e.reduceLeaveBalance());
-//        System.out.println("Allocated");
-//    }
-//
-//    public void checkForLeaves(Employee e ) {
-//
-//    }
+
+
 
     public LeaveResponse applyForLeave(LeaveRequest request, Employee e, int numberOfDays, LeaveType type) {
         Period interval = Period.between(request.getStartDate(), request.getEndDate());
@@ -25,11 +15,12 @@ public class LeaveManager {
             e.setLeavesTaken(numberOfDays);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
-        else if(type == LeaveType.maternityLeave && e.getSex() == "female") {
+        else if(type == LeaveType.maternityLeave && e.getSex().equals ("female")) {
             e.setLeaveBalance(180);
+//            e.setLeaveBalance1(e.leaveBalance1.);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
-        else if(type == LeaveType.paternityLeave && e.getSex() == "male") {
+        else if(type == LeaveType.paternityLeave && e.getSex().equals("male")) {
             e.setLeaveBalance(30);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
@@ -53,8 +44,35 @@ public class LeaveManager {
         return e.getLeaveBalance();
     }
 
-    public int compOffBalance(Employee employee, LocalDate asOfDate) {
+
+    public int compOffBalance(Employee e) {
+
         return 0;
     }
+    CompoffStatus logExtraHours(LocalDateTime startTime, LocalDateTime endTime) {
+
+        return null;
+    }
+/*
+ *
+ *
+ *
+ *
+ */
+
+//    public LeaveResponse applyForLeave1(LeaveRequest request, Employee e, int numberOfDays, LeaveType type, int month) {
+//        Period interval = Period.between(request.getStartDate(), request.getEndDate());
+//
+//        if(request.getStartDate().isAfter(request.getEndDate())) {
+//            throw new IllegalArgumentException("Start date >= end date");
+//        }
+//        else if(  interval.getDays() <= e.leaveBalance1.get(month) ) {
+//            e.leaveBalance1.replace(month,2,2-interval.getDays());
+//            e.setLeaveBalance1(e.leaveBalance1);
+//            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
+//
+//        }
+//        return new LeaveResponse(LeaveStatus.REJECTED, "Unknown Error");
+//    }
 
 }

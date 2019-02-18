@@ -44,7 +44,7 @@ public class LeaveManagerTest {
         LeaveManager manager = new LeaveManager();
         LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(5));
         LeaveResponse response = manager.applyForLeave(request,e,5,LeaveType.paternityLeave);
-        assertEquals("Not Approved",LeaveStatus.ACCEPTED,response.getStatus());
+        assertEquals("Not Approved",LeaveStatus.REJECTED,response.getStatus());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class LeaveManagerTest {
         assertEquals("Not Approved",LeaveStatus.ACCEPTED,response.getStatus());
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void endDateBeforeStartDate() {
         Employee e = new Employee(1,"Someone","Developer",6,"male");
 
@@ -66,4 +66,13 @@ public class LeaveManagerTest {
         LeaveResponse response = manager.applyForLeave(request,e,5,LeaveType.OOO);
         assertEquals("Not Approved",LeaveStatus.REJECTED,response.getStatus());
     }
+//    @Test
+//    public void testLeaveBalance1HashMap() {
+//        Employee e = new Employee(1,"Someone","Developer",6,"male");
+//
+//        LeaveManager manager = new LeaveManager();
+//        LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(5));
+//        LeaveResponse response = manager.applyForLeave1(request,e,5,LeaveType.OOO,3);
+//        assertEquals("Not Approved",LeaveStatus.ACCEPTED,response.getStatus());
+//    }
 }
