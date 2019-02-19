@@ -1,17 +1,58 @@
 package com.hashedin.tracker;
-import java.time.temporal.ChronoUnit;
-import java.time.Period;
+
+import java.time.Month;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class Employee {
 
     private int empId;
     private String empName;
     private String empDesignation;
-    private int leaveBalance=2;
+    private int leaveBalance;
+    private boolean maternityLeaveStatus;
+    private String sex;
+    private boolean paternityLeaveStatus;
+    LocalDate leaveDate;
+
+    public LocalDate getJoiningDate() {
+        return joiningDate;
+    }
+
+    public void setJoiningDate(LocalDate joiningDate) {
+        this.joiningDate = joiningDate;
+    }
+
+    LocalDate joiningDate;
+
+    public Month getMonth() {
+        return month;
+    }
+
+    public void setMonth(Month month) {
+        this.month = month;
+    }
+
+    private Month month;
+
+    public boolean getMaternityLeaveStatus() {
+        return maternityLeaveStatus;
+    }
+
+    public void setMaternityLeaveStatus(boolean maternityLeaveStatus,LocalDate date) {
+        this.maternityLeaveStatus = maternityLeaveStatus;
+        this.leaveDate = date;
+    }
+
+    public boolean getPaternityLeaveStatus() {
+        return paternityLeaveStatus;
+    }
+
+    public void setPaternityLeaveStatus(boolean paternityLeaveStatus, LocalDate date) {
+        this.paternityLeaveStatus = paternityLeaveStatus;
+        this.leaveDate = date;
+    }
+
+
 
     public Employee(int empId, String empName, String empDesignation, int leaveBalance, int compOffBalance, int leavesTaken, String sex) {
         this.empId = empId;
@@ -43,12 +84,13 @@ public class Employee {
 //
 //    HashMap<Integer,Integer> leaveBalance1=new HashMap<Integer, Integer>();
 
-    public int getLeavesTaken() {
+    public int getLeavesTaken(Month m) {
         return leavesTaken;
     }
 
-    public void setLeavesTaken(int leavesTaken) {
+    public void setLeavesTaken(int leavesTaken, Month m) {
         this.leavesTaken = leavesTaken;
+        this.month = m;
     }
 
     private int leavesTaken;
@@ -59,19 +101,7 @@ public class Employee {
     public void setSex(String sex) {
         this.sex = sex;
     }
-
-    private String sex;
-    public Employee() {
-//        for(int i=1;i<=12;i++)
-//            leaveBalance1.put(i,2);
-    }
-    Employee(int eId, String eName, String eDesignation, int leaveBal, String sex) {
-        this.empId = eId;
-        this.empName = eName;
-        this.empDesignation = eDesignation;
-        this.leaveBalance = leaveBal;
-        this.sex = sex;
-    }
+    public Employee() {}
     // Getter Methods
     public int getEmpId() {
         return empId;

@@ -1,6 +1,8 @@
 package com.hashedin.tracker;
 import java.time.*;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 public class LeaveManager {
 
 
@@ -9,27 +11,31 @@ public class LeaveManager {
 
 
         if(request.getStartDate().isAfter(request.getEndDate())) {
-            throw new IllegalArgumentException("Start date >= end date");
+            throw new IllegalArgumentException("Start leaveDate >= end leaveDate");
         }
         else if(interval.getDays() <= e.getLeaveBalance() ) {
             request.list.add(request.getStartDate());
             request.list.add(request.getEndDate());
             e.reduceLeaveBalance(numberOfDays);
-            e.setLeavesTaken(numberOfDays);
+            e.setLeavesTaken(numberOfDays,request.getStartDate().getMonth());
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
-        else if(type == LeaveType.maternityLeave && e.getSex().equals ("female")) {
+        else if(type == LeaveType.maternityLeave && e.getSex().equals ("female") && DAYS.between(e.getJoiningDate(),request.getStartDate())>=180)  {
+            e.setMaternityLeaveStatus(true,request.getStartDate());
+            e.setPaternityLeaveStatus(false,request.getStartDate());
             e.setLeaveBalance(180);
 //            e.setLeaveBalance1(e.leaveBalance1.);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
         else if(type == LeaveType.paternityLeave && e.getSex().equals("male")) {
             e.setLeaveBalance(30);
+            e.setMaternityLeaveStatus(false,request.getStartDate());
+            e.setPaternityLeaveStatus(true,request.getStartDate());
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
         else if(type ==  LeaveType.general && interval.getDays() <= e.getLeaveBalance()) {
            e.reduceLeaveBalance(numberOfDays);
-            e.setLeavesTaken(numberOfDays);
+            e.setLeavesTaken(numberOfDays,request.getStartDate().getMonth());
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
         else if(interval.getDays() > e.getLeaveBalance() ) {
@@ -74,7 +80,7 @@ public class LeaveManager {
 //        Period interval = Period.between(request.getStartDate(), request.getEndDate());
 //
 //        if(request.getStartDate().isAfter(request.getEndDate())) {
-//            throw new IllegalArgumentException("Start date >= end date");
+//            throw new IllegalArgumentException("Start leaveDate >= end leaveDate");
 //        }
 //        else if(  interval.getDays() <= e.leaveBalance1.get(month) ) {
 //            e.leaveBalance1.replace(month,2,2-interval.getDays());
