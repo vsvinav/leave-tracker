@@ -1,6 +1,6 @@
 package com.hashedin.tracker;
 
 public enum LeaveType {
-            OOO, compOff, maternityLeave, paternityLeave;
+            OOO, compOff, maternityLeave, paternityLeave, general
 
 }

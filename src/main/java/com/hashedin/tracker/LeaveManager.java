@@ -1,16 +1,19 @@
 package com.hashedin.tracker;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
-public class LeaveManager {
 
+public class LeaveManager {
 
 
     public LeaveResponse applyForLeave(LeaveRequest request, Employee e, int numberOfDays, LeaveType type) {
         Period interval = Period.between(request.getStartDate(), request.getEndDate());
+
+
         if(request.getStartDate().isAfter(request.getEndDate())) {
             throw new IllegalArgumentException("Start date >= end date");
         }
         else if(interval.getDays() <= e.getLeaveBalance() ) {
+            request.list.add(request.getStartDate());
+            request.list.add(request.getEndDate());
             e.reduceLeaveBalance(numberOfDays);
             e.setLeavesTaken(numberOfDays);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
@@ -24,7 +27,7 @@ public class LeaveManager {
             e.setLeaveBalance(30);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
         }
-        else if(type ==  LeaveType.OOO && interval.getDays() <= e.getLeaveBalance()) {
+        else if(type ==  LeaveType.general && interval.getDays() <= e.getLeaveBalance()) {
            e.reduceLeaveBalance(numberOfDays);
             e.setLeavesTaken(numberOfDays);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
@@ -37,22 +40,29 @@ public class LeaveManager {
 //    LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(2));
 
     public int leaveBalance(Employee e, LocalDate asOfDate) {
-//        if( e.getLeaveBalance() <= 0)
-//            return 0;
-//        else if ((ChronoUnit.DAYS.between(request.getStartDate(),request.getEndDate()))>e.getLeaveBalance()){
-//        }
+        asOfDate=LocalDate.now();
+
         return e.getLeaveBalance();
     }
 
 
-    public int compOffBalance(Employee e) {
-
-        return 0;
+    public int compOffBalance(Employee e, LocalDate asOfDay) {
+        return e.getCompOffBalance();
     }
-    CompoffStatus logExtraHours(LocalDateTime startTime, LocalDateTime endTime) {
+    void logExtraHours(Employee e,LocalDate compOffDate, LocalDate workedDay) {
+        CompoffManager status = new CompoffManager();
+        int day = workedDay.getDayOfMonth();
+        int balance=e.getCompOffBalance();
+        for(int i = 0; i < status.findWeekend(workedDay.getMonth()).size(); i++) {
+            if (day == status.findWeekend(workedDay.getMonth()).get(i)) {
+                balance++;
+            }
+        }
 
-        return null;
+        e.setCompOffBalance(balance);
+
     }
+
 /*
  *
  *

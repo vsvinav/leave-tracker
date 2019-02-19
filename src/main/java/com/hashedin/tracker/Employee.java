@@ -13,6 +13,25 @@ public class Employee {
     private String empDesignation;
     private int leaveBalance=2;
 
+    public Employee(int empId, String empName, String empDesignation, int leaveBalance, int compOffBalance, int leavesTaken, String sex) {
+        this.empId = empId;
+        this.empName = empName;
+        this.empDesignation = empDesignation;
+        this.leaveBalance = leaveBalance;
+        this.compOffBalance = compOffBalance;
+        this.leavesTaken = leavesTaken;
+        this.sex = sex;
+    }
+
+    public int getCompOffBalance() {
+        return compOffBalance;
+    }
+
+    public void setCompOffBalance(int compOffBalance) {
+        this.compOffBalance = compOffBalance;
+    }
+
+    private int compOffBalance = 0;
 //    public HashMap<Integer, Integer> getLeaveBalance1() {
 //        return leaveBalance1;
 //    }

@@ -3,6 +3,7 @@ package com.hashedin.tracker;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.Month;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +14,7 @@ public class LeaveManagerTest {
         Employee e = new Employee(1,"Someone","Developer",5, "male");
          LeaveManager manager = new LeaveManager();
          LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(2));
-        LeaveResponse response = manager.applyForLeave(request,e,3,LeaveType.OOO);
+        LeaveResponse response = manager.applyForLeave(request,e,3,LeaveType.general);
         assertEquals("Approved",LeaveStatus.ACCEPTED,response.getStatus());
     }
 
@@ -34,7 +35,7 @@ public class LeaveManagerTest {
         LeaveManager manager = new LeaveManager();
         LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(5));
         LeaveResponse response = manager.applyForLeave(request,e,5,LeaveType.maternityLeave);
-        assertEquals("Not Approved",LeaveStatus.ACCEPTED,response.getStatus());
+        assertEquals("Not Approved",LeaveStatus.REJECTED,response.getStatus());
     }
 
     @Test
@@ -63,8 +64,18 @@ public class LeaveManagerTest {
 
         LeaveManager manager = new LeaveManager();
         LeaveRequest request = new LeaveRequest(1, LocalDate.now().plusDays(5), LocalDate.now());
-        LeaveResponse response = manager.applyForLeave(request,e,5,LeaveType.OOO);
+        LeaveResponse response = manager.applyForLeave(request,e,5,LeaveType.general);
         assertEquals("Not Approved",LeaveStatus.REJECTED,response.getStatus());
+    }
+
+    @Test
+    public void compOffCheck() {
+        LeaveManager manager = new LeaveManager();
+        LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(5));
+        CompoffManager compoffManager = new CompoffManager();
+        Employee e = new Employee(1,"Name","Developer",2,0,0,"male");
+        manager.logExtraHours(e,LocalDate.of(2019, Month.FEBRUARY,20),LocalDate.of(2019,Month.FEBRUARY,16));
+        assertEquals("CompOff Balance:",1,manager.compOffBalance(e,LocalDate.now()));
     }
 //    @Test
 //    public void testLeaveBalance1HashMap() {
