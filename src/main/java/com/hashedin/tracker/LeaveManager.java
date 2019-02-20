@@ -18,7 +18,7 @@ public class LeaveManager {
 
     public LeaveResponse applyForLeave(LeaveRequest request, Employee e, int numberOfDays, LeaveType type) {
         Period interval = Period.between(request.getStartDate(), request.getEndDate());
-        e = new EmployeeMockData().getEmployeeDetails(2);
+//        e = new EmployeeMockData().getEmployeeDetails(2);
         if(request.getStartDate().isAfter(request.getEndDate())) {
             throw new IllegalArgumentException("Start leaveDate >= end leaveDate");
         }
@@ -26,7 +26,7 @@ public class LeaveManager {
 
             e.reduceLeaveBalance(numberOfDays);
             e.setLeavesTaken(numberOfDays,request.getStartDate().getMonth());
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
+            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted because you have enough balance");
         }
         else if(type == LeaveType.maternityLeave && e.getSex().equals ("female") && DAYS.between(e.getJoiningDate(),request.getStartDate())>=180)  {
             e.setMaternityLeaveStatus(true,request.getStartDate());
@@ -47,13 +47,13 @@ public class LeaveManager {
             e.setPaternityLeaveStatus(true,request.getStartDate());
             setBlanketCoverageStatus(true);
             ifBlanketCoverage(request,e);
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
+            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted for paternity");
         }
         else if(type ==  LeaveType.general && interval.getDays() <= e.getLeaveBalance()) {
            e.reduceLeaveBalance(numberOfDays);
             setBlanketCoverageStatus(false);
            ifNonBlanketCoverage(request, e);
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
+            return new LeaveResponse(LeaveStatus.ACCEPTED, "General Leave Granted");
         }
         else if(interval.getDays() > e.getLeaveBalance() ) {
             return new LeaveResponse(LeaveStatus.REJECTED, "INSUFFICIENT BALANCE");
