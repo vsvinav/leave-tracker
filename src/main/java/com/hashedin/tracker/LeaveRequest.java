@@ -7,6 +7,16 @@ import java.util.ArrayList;
 public class LeaveRequest {
     private int empId;
     private LocalDate startDate, endDate;
+
+    public Employee getEmployee() {
+        return e;
+    }
+
+    public void setEmployee(Employee e) {
+        this.e = e;
+    }
+
+    Employee e;
     ArrayList<LocalDate> list = new ArrayList<>();
     public LeaveRequest(int empId, LocalDate startDate, LocalDate endDate) {
         this.empId = empId;
@@ -40,4 +50,6 @@ public class LeaveRequest {
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
+
+
 }

@@ -11,22 +11,21 @@ import java.util.concurrent.TimeUnit;
 public class LeaveAccrualManager {
 
     public void creditLeaves(Employee e){
-        if( e.getPaternityLeaveStatus()) {
+        if( e.getPaternityLeaveStatus() && e.getSex().equals("male")) {
                 e.setLeaveBalance(30);
+                return;
         }
-        else if(e.getMaternityLeaveStatus())
+         if(e.getMaternityLeaveStatus() && e.getSex().equals("female"))
         {
             e.setLeaveBalance(180);
+            return;
         }
-        else if(e.getLeavesTaken(LocalDate.now().getMonth())>0 && e.getLeavesTaken(LocalDate.now().getMonth())<=e.getLeaveBalance()) {
+         if(e.getLeavesTaken(LocalDate.now().getMonth())>=0 && e.getLeavesTaken(LocalDate.now().getMonth())<=e.getLeaveBalance()) {
 
             e.setLeaveBalance(e.getLeaveBalance()-e.getLeavesTaken(LocalDate.now().getMonth())+2);
         }
-        else if(e.getJoiningDate().getMonth() == LocalDate.now().getMonth()){
+         if(e.getJoiningDate().getMonth() == LocalDate.now().getMonth()){
             e.setLeaveBalance(0);
-        }
-        else {
-           e.setLeaveBalance(e.getLeaveBalance()+2);
         }
     }
 

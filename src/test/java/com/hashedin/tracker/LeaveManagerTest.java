@@ -20,7 +20,7 @@ public class LeaveManagerTest {
 
     @Test
     public void testFemaleMaternityLeave() {
-        Employee e = new Employee(1,"Someone","Developer",0,0,0,"female");
+        Employee e = new Employee(1,"name","developer",2,"female",false,LocalDate.now(),LocalDate.of(2018,1,1),0,0);
 
         LeaveManager manager = new LeaveManager();
         LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(5));
@@ -74,7 +74,7 @@ public class LeaveManagerTest {
         LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(5));
         CompoffManager compoffManager = new CompoffManager();
         Employee e = new Employee(1,"Name","Developer",2,0,0,"male");
-        manager.logExtraHours(e,LocalDate.of(2019, Month.FEBRUARY,20),LocalDate.of(2019,Month.FEBRUARY,16));
+        manager.logExtraWork(e,LocalDate.of(2019, Month.FEBRUARY,20),LocalDate.of(2019,Month.FEBRUARY,16));
         assertEquals("CompOff Balance:",1,manager.compOffBalance(e,LocalDate.now()));
     }
 //    @Test

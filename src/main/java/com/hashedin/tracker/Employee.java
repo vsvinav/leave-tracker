@@ -14,6 +14,37 @@ public class Employee {
     private boolean paternityLeaveStatus;
     LocalDate leaveDate;
 
+    public Employee(int empId, String empName, String empDesignation, int leaveBalance,
+                    boolean maternityLeaveStatus, String sex, boolean paternityLeaveStatus,
+                    LocalDate leaveDate, LocalDate joiningDate,int compOffBalance,
+                    int leavesTaken) {
+        this.empId = empId;
+        this.empName = empName;
+        this.empDesignation = empDesignation;
+        this.leaveBalance = leaveBalance;
+        this.maternityLeaveStatus = maternityLeaveStatus;
+        this.sex = sex;
+        this.paternityLeaveStatus = paternityLeaveStatus;
+        this.leaveDate = leaveDate;
+        this.joiningDate = joiningDate;
+//        this.month = month;
+        this.compOffBalance = compOffBalance;
+        this.leavesTaken = leavesTaken;
+    }
+
+    public Employee(int empId, String empName, String empDesignation, int leaveBalance, String sex, boolean paternityLeaveStatus, LocalDate leaveDate, LocalDate joiningDate, int compOffBalance, int leavesTaken) {
+        this.empId = empId;
+        this.empName = empName;
+        this.empDesignation = empDesignation;
+        this.leaveBalance = leaveBalance;
+        this.sex = sex;
+        this.paternityLeaveStatus = paternityLeaveStatus;
+        this.leaveDate = leaveDate;
+        this.joiningDate = joiningDate;
+        this.compOffBalance = compOffBalance;
+        this.leavesTaken = leavesTaken;
+    }
+
     public LocalDate getJoiningDate() {
         return joiningDate;
     }

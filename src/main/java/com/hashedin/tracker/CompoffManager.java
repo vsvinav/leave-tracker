@@ -1,6 +1,7 @@
 package com.hashedin.tracker;
 
 import java.time.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
@@ -42,6 +43,11 @@ public class CompoffManager {
                         date.getDayOfWeek() == DayOfWeek.SUNDAY)
                 .forEach(date -> weekendList.add(date.getDayOfMonth()));
         return weekendList;
+    }
+    int numberOfWeekendContained(LocalDate startDate, LocalDate endDate) {
+        LocalDate start = startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate end = endDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
+        return Period.between(start, end).getDays()/ 7;
     }
 
 }
