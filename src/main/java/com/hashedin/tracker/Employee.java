@@ -12,6 +12,18 @@ public class Employee {
     private boolean maternityLeaveStatus;
     private String sex;
     private boolean paternityLeaveStatus;
+    private int optionalLeaveBalance=2;
+
+    public int getOptionalLeavesTaken() {
+        return optionalLeavesTaken;
+    }
+
+    public void setOptionalLeavesTaken(int optionalLeavesTaken) {
+        this.optionalLeavesTaken = optionalLeavesTaken;
+    }
+
+    private int optionalLeavesTaken;
+
     LocalDate leaveDate;
 
     public Employee(int empId, String empName, String empDesignation, int leaveBalance,
@@ -54,6 +66,15 @@ public class Employee {
     }
 
     LocalDate joiningDate;
+
+
+    public int getOptionalLeaveBalance() {
+        return optionalLeaveBalance;
+    }
+
+    public void setOptionalLeaveBalance(int optionalLeaveBalance) {
+        this.optionalLeaveBalance = optionalLeaveBalance;
+    }
 
     public Month getMonth() {
         return month;

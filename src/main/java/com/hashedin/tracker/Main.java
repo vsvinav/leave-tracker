@@ -1,4 +1,7 @@
 package com.hashedin.tracker;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -11,17 +14,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
-
+@SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
+        LeaveManager manager = new LeaveManager();
+//        System.out.println(manager.applyForLeave(new LeaveRequestMockData().getMockData(),new Employee(),2,LeaveType.general).reason);
 
-        System.out.println("Hello");
-        LocalDate date = LocalDate.now();
-        System.out.println(date.getDayOfMonth());
-        System.out.println(date.getMonth());
-        System.out.println(date.getYear());
-
+        SpringApplication.run(Main.class,args);
     }
 //    Runnable runnable = new Runnable() {
 //        public void run() {

@@ -14,9 +14,11 @@ public class LeaveManager {
 
     private boolean blanketCoverageStatus;
 
+
+
     public LeaveResponse applyForLeave(LeaveRequest request, Employee e, int numberOfDays, LeaveType type) {
         Period interval = Period.between(request.getStartDate(), request.getEndDate());
-
+        e = new EmployeeMockData().getEmployeeDetails(2);
         if(request.getStartDate().isAfter(request.getEndDate())) {
             throw new IllegalArgumentException("Start leaveDate >= end leaveDate");
         }
@@ -29,14 +31,18 @@ public class LeaveManager {
         else if(type == LeaveType.maternityLeave && e.getSex().equals ("female") && DAYS.between(e.getJoiningDate(),request.getStartDate())>=180)  {
             e.setMaternityLeaveStatus(true,request.getStartDate());
             e.setPaternityLeaveStatus(false,request.getStartDate());
+            System.out.println("I am going here");
             e.setLeaveBalance(180);
+            request.setEndDate(LocalDate.now().plusMonths(6));
             setBlanketCoverageStatus(true);
             ifBlanketCoverage(request,e);
 //            e.setLeaveBalance1(e.leaveBalance1.);
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted");
+            return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted For maternity");
         }
         else if(type == LeaveType.paternityLeave && e.getSex().equals("male")) {
             e.setLeaveBalance(30);
+            request.setEndDate(LocalDate.now().plusMonths(1));
+
             e.setMaternityLeaveStatus(false,request.getStartDate());
             e.setPaternityLeaveStatus(true,request.getStartDate());
             setBlanketCoverageStatus(true);
@@ -73,6 +79,10 @@ public class LeaveManager {
             if (duration > minDuration || duration < maxDuration) {
                 return new LeaveResponse(LeaveStatus.ACCEPTED, "leave duration is minimum 1 and maximum 3 months");
             }
+
+        }
+        if(e.getOptionalLeavesTaken()<e.getOptionalLeaveBalance()/2) {
+            return new LeaveResponse(LeaveStatus.ACCEPTED, "you have optional leaves available");
         }
 
 
@@ -121,6 +131,7 @@ public class LeaveManager {
     }
 
     public void ifNonBlanketCoverage(LeaveRequest request, Employee e) {
+        e = new EmployeeMockData().getEmployeeDetails(1);
         CompoffManager compoffManager = new CompoffManager();
         int daysBetween =(int) DAYS.between(request.getStartDate(), request.getEndDate());
         int holidaysBetween = compoffManager.numberOfWeekendContained(request.getStartDate(),request.getEndDate());
@@ -128,10 +139,13 @@ public class LeaveManager {
     }
 
     public void ifBlanketCoverage ( LeaveRequest request, Employee e) {
+        e = new EmployeeMockData().getEmployeeDetails(1);
         CompoffManager compoffManager = new CompoffManager();
         int daysBetween =(int) DAYS.between(request.getStartDate(), request.getEndDate());
         e.setLeavesTaken(daysBetween, LocalDate.now().getMonth());
     }
+
+
 /*
  public boolean logExtraWork(LocalDateTime startTime, LocalDateTime endTime) {
         LocalDateTime tempDateTime = LocalDateTime.from(startTime);
@@ -160,5 +174,16 @@ public class LeaveManager {
 //        }
 //        return new LeaveResponse(LeaveStatus.REJECTED, "Unknown Error");
 //    }
+/*
+What is it you want me to tell ya?
+I'm not the failure
+I would rather live and let be
+But you can't make the right kinda threat to
+Push me to let you
+No, you can't intimidate me
+You disrespect me so clearly
+Now you better hear me
+That is not the way it goes down
+ */
 
 }

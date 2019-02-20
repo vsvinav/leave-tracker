@@ -8,6 +8,11 @@ public class LeaveRequest {
     private int empId;
     private LocalDate startDate, endDate;
 
+    public LeaveRequest(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Employee getEmployee() {
         return e;
     }

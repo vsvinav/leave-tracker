@@ -20,15 +20,25 @@ public class LeaveAccrualManager {
             e.setLeaveBalance(180);
             return;
         }
-         if(e.getLeavesTaken(LocalDate.now().getMonth())>=0 && e.getLeavesTaken(LocalDate.now().getMonth())<=e.getLeaveBalance()) {
+        if(e.getJoiningDate().getMonth() == LocalDate.now().getMonth()){
+            e.setLeaveBalance(0);
+            return;
+        }
+         if(e.getLeavesTaken(LocalDate.now().getMonth())>=0 && e.getLeavesTaken(LocalDate.now().getMonth())<=e.getLeaveBalance() &&
+                 !e.getMaternityLeaveStatus() && !e.getPaternityLeaveStatus()) {
 
             e.setLeaveBalance(e.getLeaveBalance()-e.getLeavesTaken(LocalDate.now().getMonth())+2);
         }
-         if(e.getJoiningDate().getMonth() == LocalDate.now().getMonth()){
-            e.setLeaveBalance(0);
-        }
-    }
 
+
+    }
+/*
+for(int i=0; i<optionalHolidays.size(); i++){
+                if(optionalHolidays.get(i) == LocalDate.now() && optionalCount > request.getEmployee().getOptionalHoliday()/2){
+                    return new LeaveResponse(LeaveStatus.REJECTED, "Already have maximum leaves for optional holiday");
+                }
+            }
+ */
 
 }
 
