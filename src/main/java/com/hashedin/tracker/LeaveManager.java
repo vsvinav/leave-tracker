@@ -174,16 +174,5 @@ public class LeaveManager {
 //        }
 //        return new LeaveResponse(LeaveStatus.REJECTED, "Unknown Error");
 //    }
-/*
-What is it you want me to tell ya?
-I'm not the failure
-I would rather live and let be
-But you can't make the right kinda threat to
-Push me to let you
-No, you can't intimidate me
-You disrespect me so clearly
-Now you better hear me
-That is not the way it goes down
- */
 
 }
