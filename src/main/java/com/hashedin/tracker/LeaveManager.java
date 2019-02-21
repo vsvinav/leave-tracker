@@ -68,11 +68,11 @@ public class LeaveManager {
             }
 
         }
-        if(e.getOptionalLeavesTaken()<e.getOptionalLeaveBalance()/2) {
+        if(e.getLeaveType() == LeaveType.optionalLeave && e.getOptionalLeavesTaken()<e.getOptionalLeaveBalance()/2) {
             return new LeaveResponse(LeaveStatus.ACCEPTED, "you have optional leaves available");
         }
 
-
+        e.setLeaveEndDate(LocalDate.now());
         return new LeaveResponse(LeaveStatus.REJECTED, "Unknown Error");
     }
 //    LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(2));
