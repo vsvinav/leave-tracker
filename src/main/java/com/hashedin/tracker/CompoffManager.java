@@ -5,6 +5,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 public class CompoffManager {
     private LocalDate compOffDate;
     private LocalDate workedDate;
@@ -47,7 +49,7 @@ public class CompoffManager {
     int numberOfWeekendContained(LocalDate startDate, LocalDate endDate) {
         LocalDate start = startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate end = endDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
-        return Period.between(start, end).getDays()/ 7;
+        return (int)DAYS.between(start, end)/ 7;
     }
 
 }

@@ -2,6 +2,7 @@ package com.hashedin.tracker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.validation.constraints.Null;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -17,10 +18,14 @@ import java.util.stream.IntStream;
 @SpringBootApplication
 public class Main {
 
-    public static void main(String[] args) {
-        LeaveManager manager = new LeaveManager();
+    public static void main(String[] args)  {
 //        System.out.println(manager.applyForLeave(new LeaveRequestMockData().getMockData(),new Employee(),2,LeaveType.general).reason);
-
+//        LeaveManager manager = new LeaveManager();
+//        Employee e = new EmployeeMockData().getEmployeeDetails(2);
+//
+//        String s= manager.applyForLeave(new LeaveRequest(),e  ).reason + ".<br>For employee:" + e.getEmpName()
+//                + " till " + e.getLeaveEndDate();
+//        System.out.println(s);
         SpringApplication.run(Main.class,args);
     }
 //    Runnable runnable = new Runnable() {

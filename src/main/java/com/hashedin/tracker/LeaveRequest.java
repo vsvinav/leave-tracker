@@ -40,7 +40,7 @@ public class LeaveRequest {
         this.empId = empId;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDate getLeaveStartDate() {
         return startDate;
     }
 
