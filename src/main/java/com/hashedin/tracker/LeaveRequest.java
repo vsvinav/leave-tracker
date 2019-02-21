@@ -2,7 +2,6 @@ package com.hashedin.tracker;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class LeaveRequest {
     private int empId;
@@ -21,8 +20,7 @@ public class LeaveRequest {
         this.e = e;
     }
 
-    Employee e;
-    ArrayList<LocalDate> list = new ArrayList<>();
+    private Employee e;
     public LeaveRequest(int empId, LocalDate startDate, LocalDate endDate) {
         this.empId = empId;
         this.startDate = startDate;

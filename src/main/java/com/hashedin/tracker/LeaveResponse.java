@@ -1,8 +1,8 @@
 package com.hashedin.tracker;
 
 public class LeaveResponse {
-    LeaveStatus status;
-    String reason;
+    private LeaveStatus status;
+    private String reason;
 
     public LeaveResponse(LeaveStatus status, String reason) {
         this.status = status;

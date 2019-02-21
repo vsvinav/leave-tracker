@@ -1,12 +1,12 @@
 package com.hashedin.tracker;
 
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.Month;
 import java.time.LocalDate;
-//@Entity
+@Entity
 public class Employee {
-//    @Id
+    @Id
     private int empId;
     private String empName;
     private String empDesignation;

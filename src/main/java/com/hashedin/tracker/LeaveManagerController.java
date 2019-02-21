@@ -1,6 +1,5 @@
 package com.hashedin.tracker;
 
-import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,7 +10,7 @@ public class LeaveManagerController {
         LeaveManager manager = new LeaveManager();
         Employee e = new EmployeeMockData().getEmployeeDetails(id);
 
-        String s= manager.applyForLeave(new LeaveRequest(),e  ).reason + ".<br>For employee:" + e.getEmpName()
+        String s= manager.applyForLeave(new LeaveRequest(),e  ).getReason() + ".<br>For employee:" + e.getEmpName()
                 + " till " + e.getLeaveEndDate();
 
         return s;
@@ -21,7 +20,7 @@ public class LeaveManagerController {
     @RequestMapping(value = "/employees/applyleave", method = RequestMethod.POST)
     public String leave(@RequestBody Employee e){
         LeaveManager manager = new LeaveManager();
-        String s= manager.applyForLeave(new LeaveRequest(),e  ).reason + ".<br>For employee:" + e.getEmpName()
+        String s= manager.applyForLeave(new LeaveRequest(),e  ).getReason() + ".<br>For employee:" + e.getEmpName()
                 + " till " + e.getLeaveEndDate();
 
         return s;

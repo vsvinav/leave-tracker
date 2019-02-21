@@ -1,5 +1,8 @@
 package com.hashedin.tracker;
-import java.time.*;
+
+
+import java.time.Duration;
+import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -17,51 +20,61 @@ public class LeaveManager {
 
     public LeaveResponse applyForLeave(LeaveRequest request, Employee e) {
         long interval = (int)DAYS.between(e.getLeaveStartDate(),e.getLeaveEndDate());
+
         if(e.getLeaveStartDate().isAfter(e.getLeaveEndDate())) {
             throw new IllegalArgumentException("Start leaveStartDate >= end leaveStartDate");
         }
 
-        else if(e.getLeaveType() == LeaveType.maternityLeave && e.getSex().equals ("female") && DAYS.between(e.getJoiningDate(),e.getLeaveStartDate())>=180)  {
-            e.setLeaveBalance(180);
+         if(e.getLeaveType() == LeaveType.maternityLeave && e.getSex()
+                .equals ("female") && DAYS.between(e.getJoiningDate(),e.getLeaveStartDate())>=180)  {
+             e.setLeaveBalance((int)DAYS.between(LocalDate.now(), LocalDate.now().plusMonths(6)));
             e.setLeaveEndDate(LocalDate.now().plusMonths(6));
             setBlanketCoverageStatus(true);
             ifBlanketCoverage(request,e);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted For maternity");
         }
-        else if(e.getLeaveType() == LeaveType.paternityLeave && e.getSex().equals("male")) {
-            e.setLeaveBalance(30);
+
+         if(e.getLeaveType() == LeaveType.paternityLeave && e.getSex().equals("male")) {
+             e.setLeaveBalance((int)DAYS.between(LocalDate.now(), LocalDate.now().plusMonths(1)));
             e.setLeaveEndDate(LocalDate.now().plusMonths(1));
 
             setBlanketCoverageStatus(true);
             ifBlanketCoverage(request,e);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "Leave Granted for paternity");
         }
-        else if(e.getLeaveType() ==  LeaveType.general && interval <= e.getLeaveBalance()) {
+         if(e.getLeaveType() ==  LeaveType.general && interval <= e.getLeaveBalance()) {
            e.reduceLeaveBalance((int) interval);
             setBlanketCoverageStatus(false);
 //           ifNonBlanketCoverage(request, e);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "General Leave Granted");
         }
-        else if(interval > e.getLeaveBalance() ) {
+         if(interval > e.getLeaveBalance() ) {
             return new LeaveResponse(LeaveStatus.REJECTED, "INSUFFICIENT BALANCE");
         }
         LocalDate joining = e.getJoiningDate();
-        long duration = Duration.between(e.getLeaveStartDate().atStartOfDay(), e.getLeaveEndDate().atStartOfDay()).toDays();
-        long minDuration = Duration.between(e.getLeaveStartDate().atStartOfDay(), e.getLeaveEndDate().plusMonths(1).atStartOfDay()).toDays();
-        long maxDuration = Duration.between(e.getLeaveStartDate().atStartOfDay(), e.getLeaveEndDate().plusMonths(3).atStartOfDay()).toDays();
-        long advance = Duration.between(LocalDate.now().atStartOfDay(), e.getLeaveStartDate().atStartOfDay()).toDays();
-        long expected = Duration.between(LocalDate.now().atStartOfDay(), e.getLeaveStartDate().plusMonths(3).atStartOfDay()).toDays();
-        long expYears = Duration.between(joining.atStartOfDay(), e.getJoiningDate().plusYears(2).atStartOfDay()).toDays();
-        long yearOfExperience = Duration.between(joining.atStartOfDay(), e.getLeaveStartDate().atStartOfDay()).toDays();
+        long duration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
+                e.getLeaveEndDate().atStartOfDay()).toDays();
+        long minDuration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
+                e.getLeaveEndDate().plusMonths(1).atStartOfDay()).toDays();
+        long maxDuration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
+                e.getLeaveEndDate().plusMonths(3).atStartOfDay()).toDays();
+        long advance = Duration.between(LocalDate.now().atStartOfDay(),
+                e.getLeaveStartDate().atStartOfDay()).toDays();
+        long expected = Duration.between(LocalDate.now().atStartOfDay(),
+                e.getLeaveStartDate().plusMonths(3).atStartOfDay()).toDays();
+        long expYears = Duration.between(joining.atStartOfDay(),
+                e.getJoiningDate().plusYears(2).atStartOfDay()).toDays();
+        long yearOfExperience = Duration.between(joining.atStartOfDay(),
+                e.getLeaveStartDate().atStartOfDay()).toDays();
 
         if (e.getLeaveType() == LeaveType.SABBATICAL) {
             setBlanketCoverageStatus(true);
             ifBlanketCoverage(request, e);
             if (expYears < yearOfExperience) {
-                return new LeaveResponse(LeaveStatus.ACCEPTED, "you 2 years of experience");
+                return new LeaveResponse(LeaveStatus.ACCEPTED, "you have more than 2 years of experience");
             }
             if (advance > 45 || advance < expected) {
-                return new LeaveResponse(LeaveStatus.ACCEPTED, "leave before 45 days to 3 months ");
+                return new LeaveResponse(LeaveStatus.ACCEPTED, "leave granted before 45 days to 3 months ");
             }
             if (duration > minDuration || duration < maxDuration) {
                 return new LeaveResponse(LeaveStatus.ACCEPTED, "leave duration is minimum 1 and maximum 3 months");
@@ -75,7 +88,6 @@ public class LeaveManager {
         e.setLeaveEndDate(LocalDate.now());
         return new LeaveResponse(LeaveStatus.REJECTED, "Unknown Error");
     }
-//    LeaveRequest request = new LeaveRequest(1, LocalDate.now(), LocalDate.now().plusDays(2));
 
     public int leaveBalance(Employee e, LocalDate asOfDate) {
         asOfDate=LocalDate.now();
