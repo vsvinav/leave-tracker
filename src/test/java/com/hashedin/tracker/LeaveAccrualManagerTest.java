@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import static java.util.concurrent.TimeUnit.DAYS;
 import static org.junit.Assert.*;
 
 public class LeaveAccrualManagerTest {
