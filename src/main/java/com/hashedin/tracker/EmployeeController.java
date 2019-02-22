@@ -17,7 +17,6 @@ public class EmployeeController {
 
     @RequestMapping("/employee/{id}")
     public Employee getEmployee(@PathVariable("id") int id) {
-        System.out.println("Hello");
         return employeeService.getEmployee(id);
     }
 
@@ -45,4 +44,9 @@ public class EmployeeController {
     public int employeeCompOffBalance(@PathVariable int id) {
         return employeeService.getEmployeeCompOffBalance(id);
     }
+
+//    @RequestMapping (method = RequestMethod.POST, value = "/employee/workedhours")
+//    public void addEmployee(@RequestBody Employee employee) {
+//        employeeService.addEmployee(employee);
+//    }
 }

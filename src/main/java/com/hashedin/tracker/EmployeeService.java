@@ -13,6 +13,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public List<Employee> getAllEmployees(){
+
         ArrayList<Employee> employees = new ArrayList<>();
         employeeRepository.findAll().forEach(employees::add);
         return employees;
@@ -20,6 +21,7 @@ public class EmployeeService {
     public void addEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
+
     public Employee getEmployee(int index) {
         Optional<Employee> emp = employeeRepository.findById(index);
         return emp.get();

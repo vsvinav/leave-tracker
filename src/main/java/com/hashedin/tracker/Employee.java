@@ -2,10 +2,8 @@ package com.hashedin.tracker;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Employee {
@@ -46,22 +44,7 @@ public class Employee {
         this.leavesTaken = leavesTaken;
     }
 
-    void logExtraWork(Employee e, LocalDateTime workedDateStartTime, LocalDateTime workedDateEndTime) {
-        CompoffManager status = new CompoffManager();
-        int day = workedDateStartTime.getDayOfMonth();
-        LocalDateTime tempDateTime = LocalDateTime.from(workedDateStartTime);
-        long hours = tempDateTime.until(workedDateEndTime, ChronoUnit.HOURS);
-        int balance=e.getCompOffBalance();
-        for(int i = 0; i < status.findWeekend(workedDateStartTime.getMonth()).size(); i++) {
-            if (day == status.findWeekend(workedDateStartTime.getMonth()).get(i) || hours > 8) {
-                balance++;
-                status.getCompOffLog().add(workedDateStartTime);
-            }
-        }
 
-        e.setCompOffBalance(balance);
-
-    }
     // Getter Methods
     public int getEmpId() {
         return empId;

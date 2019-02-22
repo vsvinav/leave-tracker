@@ -1,5 +1,6 @@
 package com.hashedin.tracker;
 
+
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -10,6 +11,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class CompoffManager {
     private LocalDateTime compOffDateTime;
+    public CompoffManager() {}
+    public CompoffManager(LocalDateTime workedDateStartTime, int employeeId, LocalDateTime workedDateEndTime) {
+        this.workedDateStartTime = workedDateStartTime;
+        this.employeeId = employeeId;
+        this.workedDateEndTime = workedDateEndTime;
+    }
 
     public List<LocalDateTime> getCompOffLog() {
         return compOffLog;
@@ -22,6 +29,15 @@ public class CompoffManager {
     private List<LocalDateTime> compOffLog;
     private LocalDateTime workedDateStartTime;
 
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    private int employeeId;
     public LocalDateTime getWorkedDateEndTime() {
         return workedDateEndTime;
     }
