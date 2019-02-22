@@ -1,34 +1,52 @@
 package com.hashedin.tracker;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class CompoffManager {
-    private LocalDate compOffDate;
-    private LocalDate workedDate;
+    private LocalDateTime compOffDateTime;
+
+    public List<LocalDateTime> getCompOffLog() {
+        return compOffLog;
+    }
+
+    public void setCompOffLog(List<LocalDateTime> compOffLog) {
+        this.compOffLog = compOffLog;
+    }
+
+    private List<LocalDateTime> compOffLog;
+    private LocalDateTime workedDateStartTime;
+
+    public LocalDateTime getWorkedDateEndTime() {
+        return workedDateEndTime;
+    }
+
+    public void setWorkedDateEndTime(LocalDateTime workedDateEndTime) {
+        this.workedDateEndTime = workedDateEndTime;
+    }
+
+    private LocalDateTime workedDateEndTime;
     private int duration;
 
-    public LocalDate getCompOffDate() {
-        return compOffDate;
+    public LocalDateTime getCompOffDateTime() {
+        return compOffDateTime;
     }
 
-    public void setCompOffDate(LocalDate compOffDate) {
-        this.compOffDate = compOffDate;
+    public void setCompOffDateTime(LocalDateTime compOffDateTime) {
+        this.compOffDateTime = compOffDateTime;
     }
 
-    public LocalDate getWorkedDate() {
-        return workedDate;
+    public LocalDateTime getWorkedDateStartTime() {
+        return workedDateStartTime;
     }
 
-    public void setWorkedDate(LocalDate workedDate) {
-        this.workedDate = workedDate;
+    public void setWorkedDateStartTime(LocalDateTime workedDateStartTime) {
+        this.workedDateStartTime = workedDateStartTime;
     }
 
     public int getDuration() {

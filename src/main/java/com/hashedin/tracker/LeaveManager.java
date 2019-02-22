@@ -3,10 +3,16 @@ package com.hashedin.tracker;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class LeaveManager {
+    CompoffManager compoffManager = new CompoffManager();
+
     public boolean isBlanketCoverageStatus() {
         return blanketCoverageStatus;
     }
@@ -16,7 +22,6 @@ public class LeaveManager {
     }
 
     private boolean blanketCoverageStatus;
-
 
     public LeaveResponse applyForLeave(LeaveRequest request, Employee e) {
         long interval = (int)DAYS.between(e.getLeaveStartDate(),e.getLeaveEndDate());
@@ -45,12 +50,10 @@ public class LeaveManager {
          if(e.getLeaveType() ==  LeaveType.general && interval <= e.getLeaveBalance()) {
            e.reduceLeaveBalance((int) interval);
             setBlanketCoverageStatus(false);
-//           ifNonBlanketCoverage(request, e);
+           ifNonBlanketCoverage(request, e);
             return new LeaveResponse(LeaveStatus.ACCEPTED, "General Leave Granted");
         }
-         if(interval > e.getLeaveBalance() ) {
-            return new LeaveResponse(LeaveStatus.REJECTED, "INSUFFICIENT BALANCE");
-        }
+
         LocalDate joining = e.getJoiningDate();
         long duration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
                 e.getLeaveEndDate().atStartOfDay()).toDays();
@@ -84,79 +87,67 @@ public class LeaveManager {
         if(e.getLeaveType() == LeaveType.optionalLeave && e.getOptionalLeavesTaken()<e.getOptionalLeaveBalance()/2) {
             return new LeaveResponse(LeaveStatus.ACCEPTED, "you have optional leaves available");
         }
-
+        if(e.getLeaveType() == LeaveType.compOff  )
+        {
+            return new LeaveResponse(LeaveStatus.ACCEPTED, "CompOff Leave Granted");
+        }
+        if(interval > e.getLeaveBalance() ) {
+            return new LeaveResponse(LeaveStatus.REJECTED, "INSUFFICIENT BALANCE");
+        }
         e.setLeaveEndDate(LocalDate.now());
         return new LeaveResponse(LeaveStatus.REJECTED, "Unknown Error");
     }
 
-    public int leaveBalance(Employee e, LocalDate asOfDate) {
-        asOfDate=LocalDate.now();
-
-        return e.getLeaveBalance();
-    }
 
 
-    public int compOffBalance(Employee e, LocalDate asOfDay) {
-        return e.getCompOffBalance();
-    }
 
-    void logExtraWork(Employee e, LocalDate compOffDate, LocalDate workedDay) {
+
+
+    void logExtraWork(Employee e, LocalDateTime workedDateStartTime, LocalDateTime workedDateEndTime) {
         CompoffManager status = new CompoffManager();
-        int day = workedDay.getDayOfMonth();
+        int day = workedDateStartTime.getDayOfMonth();
+        LocalDateTime tempDateTime = LocalDateTime.from(workedDateStartTime);
+        long hours = tempDateTime.until(workedDateEndTime, ChronoUnit.HOURS);
         int balance=e.getCompOffBalance();
-        for(int i = 0; i < status.findWeekend(workedDay.getMonth()).size(); i++) {
-            if (day == status.findWeekend(workedDay.getMonth()).get(i)) {
+        for(int i = 0; i < status.findWeekend(workedDateStartTime.getMonth()).size(); i++) {
+            if (day == status.findWeekend(workedDateStartTime.getMonth()).get(i) || hours > 8) {
                 balance++;
+                status.getCompOffLog().add(workedDateStartTime);
             }
         }
 
         e.setCompOffBalance(balance);
 
     }
-    public LeaveResponse checkDuplicate(LeaveRequest request, LeaveRequest request1) {
-        LocalDate start = request.getLeaveStartDate();
-        LocalDate end = request.getEndDate();
-        LocalDate start1 = request1.getLeaveStartDate();
-        LocalDate end1 = request1.getEndDate();
-
-        if (request.getEmployee().getEmpId() != request1.getEmployee().getEmpId()) {
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "Accepted");
-        }
-        if ((start1.isBefore(start) && end1.isBefore(start)) || start1.isAfter(end)) {
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "Accepted");
-        }
-        return new LeaveResponse(LeaveStatus.REJECTED, "leaves are overlapping");
-
-    }
+//    public LeaveResponse checkDuplicate(LeaveRequest request, LeaveRequest request1) {
+//        LocalDate start = request.getLeaveStartDate();
+//        LocalDate end = request.getEndDate();
+//        LocalDate start1 = request1.getLeaveStartDate();
+//        LocalDate end1 = request1.getEndDate();
+//
+//        if (request.getEmployee().getEmpId() != request1.getEmployee().getEmpId()) {
+//            return new LeaveResponse(LeaveStatus.ACCEPTED, "Accepted");
+//        }
+//        if ((start1.isBefore(start) && end1.isBefore(start)) || start1.isAfter(end)) {
+//            return new LeaveResponse(LeaveStatus.ACCEPTED, "Accepted");
+//        }
+//        return new LeaveResponse(LeaveStatus.REJECTED, "leaves are overlapping");
+//
+//    }
 
     public void ifNonBlanketCoverage(LeaveRequest request, Employee e) {
-        e = new EmployeeMockData().getEmployeeDetails(1);
         CompoffManager compoffManager = new CompoffManager();
         int daysBetween =(int) DAYS.between(e.getLeaveStartDate(), e.getLeaveEndDate());
-        int holidaysBetween = compoffManager.numberOfWeekendContained(request.getLeaveStartDate(),request.getEndDate());
+        int holidaysBetween = compoffManager.numberOfWeekendContained(e.getLeaveStartDate(),e.getLeaveEndDate());
         e.setLeavesTaken(daysBetween - holidaysBetween, LocalDate.now().getMonth());
     }
 
     public void ifBlanketCoverage ( LeaveRequest request, Employee e) {
-        e = new EmployeeMockData().getEmployeeDetails(1);
         CompoffManager compoffManager = new CompoffManager();
         int daysBetween =(int) DAYS.between(e.getLeaveStartDate(), e.getLeaveEndDate());
         e.setLeavesTaken(daysBetween, LocalDate.now().getMonth());
     }
 
 
-/*
- public boolean logExtraWork(LocalDateTime startTime, LocalDateTime endTime) {
-        LocalDateTime tempDateTime = LocalDateTime.from(startTime);
-        long hours = tempDateTime.until(endTime, ChronoUnit.HOURS);
-        if (hours >= 8) {
-            return true;
-        } else
-            return false;
-
-    }
-
-
-*/
 
 }

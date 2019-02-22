@@ -56,10 +56,13 @@ public class EmployeeMockData {
                 "female",2,LeaveType.paternityLeave,LocalDate.now(),LocalDate.now().plusMonths(1),
                 LocalDate.of(2019,01,01),0,0,1);
 
-        Employee e9 = new Employee(8,"Angela","Developer",2,
+        Employee e9 = new Employee(9,"Angela","Developer",2,
                 "female",2,LeaveType.maternityLeave,LocalDate.now(),LocalDate.now().plusMonths(6),
                 LocalDate.now(),0,0,1);
 
+        Employee e10 = new Employee(10,"Angela","Developer",2,
+                "female",2,LeaveType.SABBATICAL,LocalDate.now(),LocalDate.now().plusMonths(1),
+                LocalDate.now(),0,0,1);
         employeeList.add(e1);
         employeeList.add(e2);
         employeeList.add(e3);
@@ -69,6 +72,7 @@ public class EmployeeMockData {
         employeeList.add(e7);
         employeeList.add(e8);
         employeeList.add(e9);
+        employeeList.add(e10);
         return employeeList.get(index-1);
     }
 
