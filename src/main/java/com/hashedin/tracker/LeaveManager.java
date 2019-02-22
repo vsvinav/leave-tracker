@@ -5,8 +5,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -89,7 +87,10 @@ public class LeaveManager {
         }
         if(e.getLeaveType() == LeaveType.compOff  )
         {
-            return new LeaveResponse(LeaveStatus.ACCEPTED, "CompOff Leave Granted");
+            logExtraWork(e,compoffManager.getWorkedDateStartTime(),compoffManager.getWorkedDateEndTime());
+            if(e.getCompOffBalance() > interval) {
+                return new LeaveResponse(LeaveStatus.ACCEPTED, "CompOff Leave Granted");
+            }
         }
         if(interval > e.getLeaveBalance() ) {
             return new LeaveResponse(LeaveStatus.REJECTED, "INSUFFICIENT BALANCE");
@@ -105,35 +106,30 @@ public class LeaveManager {
 
     void logExtraWork(Employee e, LocalDateTime workedDateStartTime, LocalDateTime workedDateEndTime) {
         CompoffManager status = new CompoffManager();
+        int flg=0;
         int day = workedDateStartTime.getDayOfMonth();
         LocalDateTime tempDateTime = LocalDateTime.from(workedDateStartTime);
         long hours = tempDateTime.until(workedDateEndTime, ChronoUnit.HOURS);
         int balance=e.getCompOffBalance();
         for(int i = 0; i < status.findWeekend(workedDateStartTime.getMonth()).size(); i++) {
-            if (day == status.findWeekend(workedDateStartTime.getMonth()).get(i) || hours > 8) {
+            if (day == status.findWeekend(workedDateStartTime.getMonth()).get(i)) {
                 balance++;
-                status.getCompOffLog().add(workedDateStartTime);
+//                status.getCompOffLog().add(workedDateStartTime);
+            }
+            else if (hours > 8)
+            {
+                flg=1;
+                break;
             }
         }
-
-        e.setCompOffBalance(balance);
-
+    if(flg==1){
+        e.setCompOffBalance(++balance);
     }
-//    public LeaveResponse checkDuplicate(LeaveRequest request, LeaveRequest request1) {
-//        LocalDate start = request.getLeaveStartDate();
-//        LocalDate end = request.getEndDate();
-//        LocalDate start1 = request1.getLeaveStartDate();
-//        LocalDate end1 = request1.getEndDate();
-//
-//        if (request.getEmployee().getEmpId() != request1.getEmployee().getEmpId()) {
-//            return new LeaveResponse(LeaveStatus.ACCEPTED, "Accepted");
-//        }
-//        if ((start1.isBefore(start) && end1.isBefore(start)) || start1.isAfter(end)) {
-//            return new LeaveResponse(LeaveStatus.ACCEPTED, "Accepted");
-//        }
-//        return new LeaveResponse(LeaveStatus.REJECTED, "leaves are overlapping");
-//
-//    }
+    else {
+        e.setCompOffBalance(balance);
+    }
+    }
+
 
     public void ifNonBlanketCoverage(LeaveRequest request, Employee e) {
         CompoffManager compoffManager = new CompoffManager();

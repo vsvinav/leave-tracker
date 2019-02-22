@@ -13,7 +13,8 @@ public class LeaveAccrualManager {
                 e.setLeaveBalance((int)DAYS.between(LocalDate.now(), LocalDate.now().plusMonths(1)));
                 return;
         }
-         if(e.getLeaveType() == LeaveType.maternityLeave && e.getSex().equals("female") && (int)DAYS.between(e.getJoiningDate(),LocalDate.now())>180)
+         if(e.getLeaveType() == LeaveType.maternityLeave && e.getSex().equals("female")
+                 && (int)DAYS.between(e.getJoiningDate(),LocalDate.now())>180)
         {
             e.setLeaveBalance((int)DAYS.between(LocalDate.now(), LocalDate.now().plusMonths(6)));
             return;
@@ -30,15 +31,6 @@ public class LeaveAccrualManager {
 
 
     }
-/*
-for(int i=0; i<optionalHolidays.size(); i++){
-                if(optionalHolidays.get(i) == LocalDate.now() &&
-                optionalCount > request.getEmployee().getOptionalHoliday()/2){
-                    return new LeaveResponse(LeaveStatus.REJECTED,
-                     "Already have maximum leaves for optional holiday");
-                }
-            }
- */
 
 }
 

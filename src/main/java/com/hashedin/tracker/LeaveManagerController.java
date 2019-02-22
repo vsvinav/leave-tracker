@@ -1,29 +1,27 @@
 package com.hashedin.tracker;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LeaveManagerController {
 
-    @RequestMapping("/employees/{id}/applyleave")
-    public String leave(@PathVariable("id") int id){
-        LeaveManager manager = new LeaveManager();
-        Employee e = new EmployeeMockData().getEmployeeDetails(id);
+    @Autowired
+    private EmployeeService employeeService;
 
-        String s= manager.applyForLeave(new LeaveRequest(),e  ).getReason() + ".<br>For employee:" + e.getEmpName()
+    @RequestMapping("/employee/{id}/leave/apply")
+    public String leave(@PathVariable("id") int id) {
+        LeaveManager manager = new LeaveManager();
+        Employee e = employeeService.getEmployee(id);
+
+        String s= manager.applyForLeave(new LeaveRequest(),e  ).getReason() + ".\nFor employee:" + e.getEmpName()
                 + " till " + e.getLeaveEndDate();
 
         return s;
 
     }
 
-    @RequestMapping(value = "/employees/applyleave", method = RequestMethod.POST)
-    public String leave(@RequestBody Employee e){
-        LeaveManager manager = new LeaveManager();
-        String s= manager.applyForLeave(new LeaveRequest(),e  ).getReason() + ".<br>For employee:" + e.getEmpName()
-                + " till " + e.getLeaveEndDate();
 
-        return s;
-
-    }
 }
