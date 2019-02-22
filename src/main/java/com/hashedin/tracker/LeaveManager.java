@@ -53,7 +53,7 @@ public class LeaveManager {
         }
 
         LocalDate joining = e.getJoiningDate();
-        long duration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
+        long actualDuration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
                 e.getLeaveEndDate().atStartOfDay()).toDays();
         long minDuration = Duration.between(e.getLeaveStartDate().atStartOfDay(),
                 e.getLeaveEndDate().plusMonths(1).atStartOfDay()).toDays();
@@ -75,9 +75,9 @@ public class LeaveManager {
                 return new LeaveResponse(LeaveStatus.ACCEPTED, "you have more than 2 years of experience");
             }
             if (advance > 45 || advance < expected) {
-                return new LeaveResponse(LeaveStatus.ACCEPTED, "leave granted before 45 days to 3 months ");
+                return new LeaveResponse(LeaveStatus.ACCEPTED, "leave granted since asked before 45 days to 3 months ");
             }
-            if (duration > minDuration || duration < maxDuration) {
+            if (actualDuration > minDuration && actualDuration < maxDuration) {
                 return new LeaveResponse(LeaveStatus.ACCEPTED, "leave duration is minimum 1 and maximum 3 months");
             }
 
@@ -112,10 +112,12 @@ public class LeaveManager {
         long hours = tempDateTime.until(workedDateEndTime, ChronoUnit.HOURS);
         int balance=e.getCompOffBalance();
         for(int i = 0; i < status.findWeekend(workedDateStartTime.getMonth()).size(); i++) {
+            // Checks if worked on weekend
             if (day == status.findWeekend(workedDateStartTime.getMonth()).get(i)) {
                 balance++;
 //                status.getCompOffLog().add(workedDateStartTime);
             }
+            // Checks if worked more than 8 hours
             else if (hours > 8)
             {
                 flg=1;
@@ -130,7 +132,7 @@ public class LeaveManager {
     }
     }
 
-
+// Non Blanket coverage logic.
     public void ifNonBlanketCoverage(LeaveRequest request, Employee e) {
         CompoffManager compoffManager = new CompoffManager();
         int daysBetween =(int) DAYS.between(e.getLeaveStartDate(), e.getLeaveEndDate());
@@ -138,6 +140,7 @@ public class LeaveManager {
         e.setLeavesTaken(daysBetween - holidaysBetween, LocalDate.now().getMonth());
     }
 
+    // Blanket Coverage logic.
     public void ifBlanketCoverage ( LeaveRequest request, Employee e) {
         CompoffManager compoffManager = new CompoffManager();
         int daysBetween =(int) DAYS.between(e.getLeaveStartDate(), e.getLeaveEndDate());

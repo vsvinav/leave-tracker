@@ -10,14 +10,22 @@ import java.util.stream.IntStream;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class CompoffManager {
+
+    private LocalDateTime workedDateEndTime;
+    private int duration;
+    private List<LocalDateTime> compOffLog;
+    private LocalDateTime workedDateStartTime;
     private LocalDateTime compOffDateTime;
+    private int employeeId;
+
+
     public CompoffManager() {}
     public CompoffManager(LocalDateTime workedDateStartTime, int employeeId, LocalDateTime workedDateEndTime) {
         this.workedDateStartTime = workedDateStartTime;
         this.employeeId = employeeId;
         this.workedDateEndTime = workedDateEndTime;
     }
-
+// Getters and Setters
     public List<LocalDateTime> getCompOffLog() {
         return compOffLog;
     }
@@ -26,8 +34,7 @@ public class CompoffManager {
         this.compOffLog = compOffLog;
     }
 
-    private List<LocalDateTime> compOffLog;
-    private LocalDateTime workedDateStartTime;
+
 
     public int getEmployeeId() {
         return employeeId;
@@ -37,7 +44,7 @@ public class CompoffManager {
         this.employeeId = employeeId;
     }
 
-    private int employeeId;
+
     public LocalDateTime getWorkedDateEndTime() {
         return workedDateEndTime;
     }
@@ -46,8 +53,6 @@ public class CompoffManager {
         this.workedDateEndTime = workedDateEndTime;
     }
 
-    private LocalDateTime workedDateEndTime;
-    private int duration;
 
     public LocalDateTime getCompOffDateTime() {
         return compOffDateTime;
@@ -72,6 +77,9 @@ public class CompoffManager {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    // Logic checks for weekends in the given month, if employee works on weekends, compoff is added
+    // Underlying logic is in LeaveManager.java class
     public ArrayList<Integer> findWeekend(Month m) {
         int year    = 2019;
         Month month = m;
